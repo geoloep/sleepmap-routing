@@ -1,0 +1,18 @@
+version: "2"
+services:
+  postgresql:
+    image: starefossen/pgrouting:latest
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=routing
+  django:
+    image: routing:latest
+    volumes:
+      - ./app/src:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgresql
