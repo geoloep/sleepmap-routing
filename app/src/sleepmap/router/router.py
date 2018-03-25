@@ -33,7 +33,7 @@ class RouteHelper():
         cur = self.get_curr()
 
         cur.execute("""
-        select id from ways_vertices_pgr, ST_GeomFromText('SRID=4326;POINT({} {})') as pnt
+        select id from ways_vertices_pgr, ST_GeomFromEWKT('SRID=4326;POINT({} {})') as pnt
         where ST_DWithin(ways_vertices_pgr.the_geom, pnt, 0.001)
         order by ST_Distance(ways_vertices_pgr.the_geom, pnt)
         limit 1
