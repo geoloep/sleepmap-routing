@@ -48,17 +48,17 @@ class RouteHelper():
     def get_route(self, start, end):
         cur = self.get_curr()
 
-        print("""
-        SELECT node, edge FROM pgr_dijkstra(
-            'SELECT gid AS id,
-                source,
-                target,
-                length AS cost
-                FROM ways',
-            {}, {},
-            directed := false
-        );
-        """.format(start, end))
+        # print("""
+        # SELECT node, edge FROM pgr_dijkstra(
+        #     'SELECT gid AS id,
+        #         source,
+        #         target,
+        #         length AS cost
+        #         FROM ways',
+        #     {}, {},
+        #     directed := false
+        # );
+        # """.format(start, end))
 
         cur.execute("""
         SELECT node, edge FROM pgr_dijkstra(
@@ -84,7 +84,7 @@ class RouteHelper():
         coordinates = []
 
         for step in route:
-            print(step)
+            # print(step)
 
             if step[1] > 0:
                 cur.execute("""

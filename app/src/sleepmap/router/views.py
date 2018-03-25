@@ -5,27 +5,26 @@ from .router import RouteHelper
 
 # Create your views here.
 class Route(APIView):
-    def get(self, request):
-        helper = RouteHelper()
+    def post(self, request):
+        if ('start' in request.data and 'end' in request.data):
+            try:
+                helper = RouteHelper()
+                
+                start = helper.get_node(*request.data['start']['geometry']['coordinates'])
+                end = helper.get_node(*request.data['end']['geometry']['coordinates'])
 
-        in_start = (5.098, 52.091)
-        in_end = (5.103, 52.094)
+                route = helper.get_route(start, end)
 
-        start = helper.get_node(*in_start)
-        end = helper.get_node(*in_end)
+                gj = helper.route_to_geojson(route)
 
-        print(start, end)
-
-        route = helper.get_route(start, end)
-
-        gj = helper.route_to_geojson(route)
-
-        # r = helper.test()
-        # t = helper.get_node(5.098, 52.091)
-        
-        return Response({'route': {
-            'start': start,
-            'end': end,
-            'route': route,
-            'geojson': gj,
-        }})
+                return Response({'route': {
+                    'start': start,
+                    'end': end,
+                    'geojson': gj,
+                }})
+                
+            except Exception as e:
+                print (e)
+                return Response({"error": "An error occurred while trying to proces your input"}, 500)
+        else:
+            return Response({"error": "start and end need to be specified"}, 400)
