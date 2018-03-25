@@ -25,6 +25,6 @@ RUN apt-get -yq install \
 
 RUN apt-get -yq install osm2pgrouting
 
-RUN pip3 install Django djangorestframework django-cors-headers
+RUN pip3 install Django djangorestframework django-cors-headers gunicorn
 
-CMD ["./run.sh"]
+CMD ["./run_prod.sh"]

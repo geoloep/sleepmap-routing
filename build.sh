@@ -1,0 +1,1 @@
+docker build --rm -f app/Dockerfile -t routing:latest app
