@@ -22,7 +22,6 @@ for vs in cur.fetchall():
     select gid from ways where ST_Intersects(ways.the_geom, ST_GeomFromEWKT('SRID=4326;{}'))
     """.format(vs[0])
 
-    # print(q)
 
     cur.execute(q)
 
