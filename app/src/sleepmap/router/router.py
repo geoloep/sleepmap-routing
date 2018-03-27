@@ -4,13 +4,16 @@ from json import loads
 class RouteHelper():
 
     def __init__(self):
-        pass
+        self.conn = self.get_conn()
     
     def get_conn(self):
         return psycopg2.connect("host=postgresql dbname=routing user=postgres")
     
     def get_curr(self):
-        return self.get_conn().cursor()
+        return self.conn.cursor()
+    
+    def close(self):
+        self.conn.close()
     
     def test(self):
         cur = self.get_curr()
@@ -25,7 +28,7 @@ class RouteHelper():
 
         r = cur.fetchall()
 
-        cur.close()
+        # cur.close()
 
         return r
 
@@ -41,7 +44,7 @@ class RouteHelper():
 
         r = cur.fetchone()[0]
 
-        cur.close()
+        # cur.close()
 
         return r
     
@@ -74,7 +77,7 @@ class RouteHelper():
 
         r = cur.fetchall()
 
-        cur.close()
+        # cur.close()
 
         return r
     

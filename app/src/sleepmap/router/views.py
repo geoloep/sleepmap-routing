@@ -17,6 +17,8 @@ class Route(APIView):
 
                 gj = helper.route_to_geojson(route)
 
+                helper.close()
+
                 return Response({'route': {
                     'start': start,
                     'end': end,
