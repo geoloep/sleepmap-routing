@@ -6,6 +6,8 @@ services:
       - ./database:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=routing
+    ports:
+      - "5434:5432"
   django:
     image: routing:latest
     volumes:

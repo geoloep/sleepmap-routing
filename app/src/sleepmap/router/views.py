@@ -23,7 +23,7 @@ class Route(APIView):
                     'geojson': gj,
                 }})
                 
-            except Exception as e:
+            except KeyError as e:
                 print (e)
                 return Response({"error": "An error occurred while trying to proces your input"}, 500)
         else:
