@@ -32,8 +32,6 @@ class RouteHelper():
     def get_node(self, lng, lat):
         cur = self.get_curr()
 
-        print(lng, lat)
-
         cur.execute("""
         select id from ways_vertices_pgr, ST_GeomFromEWKT('SRID=4326;POINT({} {})') as pnt
         where ST_DWithin(ways_vertices_pgr.the_geom, pnt, 0.001)
