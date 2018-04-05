@@ -1,3 +1,1 @@
-for d in ls *.osm; do
-    osm2pgrouting -f $d --conf importconfig.xml --dbname routing --username postgres --host postgresql
-done
+osm2pgrouting -f /app/data/Utrecht.osm --conf /app/data/importconfig.xml --dbname routing --username postgres --clean --host postgresql

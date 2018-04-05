@@ -4,13 +4,16 @@ from json import loads
 class RouteHelper():
 
     def __init__(self):
-        pass
+        self.conn = self.get_conn()
     
     def get_conn(self):
         return psycopg2.connect("host=postgresql dbname=routing user=postgres")
     
     def get_curr(self):
-        return self.get_conn().cursor()
+        return self.conn.cursor()
+    
+    def close(self):
+        self.conn.close()
     
     def test(self):
         cur = self.get_curr()
@@ -25,14 +28,10 @@ class RouteHelper():
 
         r = cur.fetchall()
 
-        cur.close()
-
         return r
 
     def get_node(self, lng, lat):
         cur = self.get_curr()
-
-        print(lng, lat)
 
         cur.execute("""
         select id from ways_vertices_pgr, ST_GeomFromEWKT('SRID=4326;POINT({} {})') as pnt
@@ -42,8 +41,6 @@ class RouteHelper():
         """.format(lng, lat))
 
         r = cur.fetchone()[0]
-
-        cur.close()
 
         return r
     
@@ -70,15 +67,31 @@ class RouteHelper():
                 length AS cost
                 FROM ways',
             {}, {},
-            directed := false
+            directed := true
         );
         """.format(start, end))
 
         r = cur.fetchall()
 
-        cur.close()
-
         return r
+    
+    def get_privacy_route(self, start, end):
+        cur = self.get_curr()
+  
+        cur.execute("""
+        SELECT node, edge FROM pgr_dijkstra(
+            'SELECT gid AS id,
+                source,
+                target,
+                cost + camera * 10000 AS cost
+                FROM ways',
+            {}, {},
+            directed := true
+        );
+        """.format(start, end))
+
+        return cur.fetchall()
+      
     
     def route_to_geojson(self, route):
         cur = self.get_curr()
@@ -95,9 +108,15 @@ class RouteHelper():
 
                 gj = loads(cur.fetchone()[0])
 
-                coordinates.append(gj['coordinates'])
+                if (len(coordinates) == 0):
+                    coordinates.extend(gj['coordinates'])                
+                else:
+                    coordinates.extend(gj['coordinates'][1:])
         
         return {
-            'type': 'MultiLineString',
+            'type': 'LineString',
             'coordinates': coordinates,
         }
+
+    def intersect(self):
+        pass

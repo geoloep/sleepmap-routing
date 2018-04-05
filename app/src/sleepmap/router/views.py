@@ -6,16 +6,21 @@ from .router import RouteHelper
 # Create your views here.
 class Route(APIView):
     def post(self, request):
-        if ('start' in request.data and 'end' in request.data):
+        if ('start' in request.data and 'end' in request.data and 'privacy' in request.data):
             try:
                 helper = RouteHelper()
                 
                 start = helper.get_node(*request.data['start']['geometry']['coordinates'])
                 end = helper.get_node(*request.data['end']['geometry']['coordinates'])
 
-                route = helper.get_route(start, end)
-
+                if request.data['privacy']:
+                    route = helper.get_privacy_route(start, end)
+                else:
+                    route = helper.get_route(start, end)
+                
                 gj = helper.route_to_geojson(route)
+
+                helper.close()
 
                 return Response({'route': {
                     'start': start,
