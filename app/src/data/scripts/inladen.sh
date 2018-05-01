@@ -1,0 +1,1 @@
+osm2pgrouting -f ../$INPUT_OSM --conf /app/data/scripts/$PGROUTING_CONFIG --dbname routing --username postgres --clean --host postgresql

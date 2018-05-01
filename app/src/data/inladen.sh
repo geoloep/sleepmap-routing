@@ -1,1 +1,0 @@
-osm2pgrouting -f Utrecht.osm --conf /app/data/importconfig.xml --dbname routing --username postgres --clean --host postgresql

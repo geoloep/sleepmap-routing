@@ -1,30 +1,32 @@
 import psycopg2
 from json import loads
 
+
 class RouteHelper():
 
     def __init__(self):
         self.conn = self.get_conn()
-    
+
     def get_conn(self):
         return psycopg2.connect("host=postgresql dbname=routing user=postgres")
-    
+
     def get_curr(self):
         return self.conn.cursor()
-    
+
     def close(self):
         self.conn.close()
-    
+
     def test(self):
         cur = self.get_curr()
-        cur.execute("""SELECT * FROM pgr_dijkstra(
-    'SELECT gid AS id,
-         source,
-         target,
-         length AS cost
-        FROM ways',
-    128, 228,
-    directed := false);""")
+        cur.execute("""
+        SELECT * FROM pgr_dijkstra(
+        'SELECT gid AS id,
+            source,
+            target,
+            length AS cost
+            FROM ways',
+        128, 228,
+        directed := false);""")
 
         r = cur.fetchall()
 
@@ -43,7 +45,7 @@ class RouteHelper():
         r = cur.fetchone()[0]
 
         return r
-    
+
     def get_route(self, start, end):
         cur = self.get_curr()
 
@@ -74,10 +76,10 @@ class RouteHelper():
         r = cur.fetchall()
 
         return r
-    
+
     def get_privacy_route(self, start, end):
         cur = self.get_curr()
-  
+
         cur.execute("""
         SELECT node, edge FROM pgr_dijkstra(
             'SELECT gid AS id,
@@ -91,8 +93,7 @@ class RouteHelper():
         """.format(start, end))
 
         return cur.fetchall()
-      
-    
+
     def route_to_geojson(self, route):
         cur = self.get_curr()
 
@@ -109,10 +110,10 @@ class RouteHelper():
                 gj = loads(cur.fetchone()[0])
 
                 if (len(coordinates) == 0):
-                    coordinates.extend(gj['coordinates'])                
+                    coordinates.extend(gj['coordinates'])
                 else:
                     coordinates.extend(gj['coordinates'][1:])
-        
+
         return {
             'type': 'LineString',
             'coordinates': coordinates,
