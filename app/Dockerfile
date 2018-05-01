@@ -4,8 +4,6 @@ WORKDIR /app
 
 VOLUME [ "/app" ]
 
-# sudo apt-get install build-essential python3-dev python3-pip python3-cffi libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info
-# Mapnik > Weasyprint > mapnik > weasyprint > mapnik
 RUN apt-get update
 RUN apt-get -yq install \
     locales \
@@ -23,7 +21,7 @@ RUN apt-get -yq install \
     python3-requests \
     python3-psycopg2
 
-RUN apt-get -yq install osm2pgrouting
+RUN apt-get -yq install osm2pgrouting postgresql-client
 
 RUN pip3 install Django djangorestframework django-cors-headers gunicorn
 
