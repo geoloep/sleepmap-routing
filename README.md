@@ -62,21 +62,21 @@ Request body example:
     "start":{
         "type":"Feature",
         "geometry":{
-        "type":"Point",
-        "coordinates":[
-            5.082,
-            52.084
-        ]
+            "type":"Point",
+            "coordinates":[
+                5.082,
+                52.084
+            ]
         }
     },
     "end":{
         "type":"Feature",
         "geometry":{
-        "type":"Point",
-        "coordinates":[
-            5.14,
-            52.105
-        ]
+            "type":"Point",
+            "coordinates":[
+                5.14,
+                52.105
+            ]
         }
     },
     "privacy":false
