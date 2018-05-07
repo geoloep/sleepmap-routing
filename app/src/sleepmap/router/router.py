@@ -62,7 +62,7 @@ class RouteHelper():
         # """.format(start, end))
 
         cur.execute("""
-        SELECT node, edge FROM pgr_dijkstra(
+        SELECT node, edge, agg_cost FROM pgr_dijkstra(
             'SELECT gid AS id,
                 source,
                 target,
