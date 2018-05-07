@@ -99,7 +99,7 @@ class RouteHelper():
             return {
                 "type": "FeatureCollection",
                 "features": []
-            }, 0
+            }, 0, 0
 
         cur = self.get_curr()
 
