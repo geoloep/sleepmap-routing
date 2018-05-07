@@ -59,29 +59,27 @@ Request body description:
 Request body example:
 ```json
 {
-   {
-      "start":{
-         "type":"Feature",
-         "geometry":{
-            "type":"Point",
-            "coordinates":[
-               5.082,
-               52.084
-            ]
-         }
-      },
-      "end":{
-         "type":"Feature",
-         "geometry":{
-            "type":"Point",
-            "coordinates":[
-               5.14,
-               52.105
-            ]
-         }
-      },
-      "privacy":false
-   }
+    "start":{
+        "type":"Feature",
+        "geometry":{
+        "type":"Point",
+        "coordinates":[
+            5.082,
+            52.084
+        ]
+        }
+    },
+    "end":{
+        "type":"Feature",
+        "geometry":{
+        "type":"Point",
+        "coordinates":[
+            5.14,
+            52.105
+        ]
+        }
+    },
+    "privacy":false
 }
 ```
 
