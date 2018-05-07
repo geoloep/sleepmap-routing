@@ -95,28 +95,65 @@ class RouteHelper():
         return cur.fetchall()
 
     def route_to_geojson(self, route):
+        if len(route) == 0:
+            return {
+                "type": "FeatureCollection",
+                "features": []
+            }
+
         cur = self.get_curr()
 
         coordinates = []
 
-        for step in route:
-            # print(step)
+        prev = -1
+        feature = None
+        coordinates = None
+        features = []
 
+        def new_feature(cameras):
+            return {
+                "type": "Feature",
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": None
+                },
+                "properties": {
+                    "cameras": cameras
+                }
+            }
+
+        for step in route:
             if step[1] > 0:
                 cur.execute("""
-                select ST_AsGeoJSON(the_geom) from ways where gid = {}
+                select ST_AsGeoJSON(the_geom), camera from ways where gid = {}
                 """.format(step[1]))
 
-                gj = loads(cur.fetchone()[0])
+                way = cur.fetchone()
+
+                # Aantal camera's veranderd
+                if way[1] != prev:
+                    if feature is not None:
+                        feature['geometry']['coordinates'] = coordinates
+                        features.append(feature)
+                    
+                    coordinates = []
+                    feature = new_feature(way[1])
+                    prev = way[1]
+
+                gj = loads(way[0])
 
                 if (len(coordinates) == 0):
                     coordinates.extend(gj['coordinates'])
                 else:
                     coordinates.extend(gj['coordinates'][1:])
 
+        if feature is not None:
+            feature['geometry']['coordinates'] = coordinates
+            features.append(feature)
+
         return {
-            'type': 'LineString',
-            'coordinates': coordinates,
+            'type': 'FeatureCollection',
+            'features': features,
         }
 
     def intersect(self):
