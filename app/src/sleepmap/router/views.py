@@ -27,9 +27,9 @@ class Route(APIView):
                     'end': end,
                     'geojson': gj,
                     'cost': route[-1][2] if len(route) > 0 else 0,
-                    'length': length,
-                    'gluur': gluur,
+                    'lengte': length,
                     'time': ((length / 1000) / 12) * 60,
+                    'gluur_lengte': gluur,
                     'gluur_time': ((gluur / 1000) / 12) * 60,
                 }})
                 

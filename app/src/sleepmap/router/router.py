@@ -138,7 +138,7 @@ class RouteHelper():
                 if way[1] != prev:
                     if feature is not None:
                         feature['geometry']['coordinates'] = coordinates
-                        feature['properties']['length'] = length
+                        feature['properties']['lengte'] = length
                         features.append(feature)
 
                         total_length += length
@@ -162,7 +162,7 @@ class RouteHelper():
 
         if feature is not None:
             feature['geometry']['coordinates'] = coordinates
-            feature['properties']['length'] = length
+            feature['properties']['lengte'] = length
             features.append(feature)
 
             total_length += length
