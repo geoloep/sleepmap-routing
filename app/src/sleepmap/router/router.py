@@ -66,8 +66,8 @@ class RouteHelper():
             'SELECT gid AS id,
                 source,
                 target,
-                abs(cost),
-                abs(reverse_cost)
+                abs(cost) as cost,
+                abs(reverse_cost) as reverse_cost
                 FROM ways',
             {}, {},
             directed := true
