@@ -40,3 +40,48 @@ docker-compose up -d
 
 ### Expose to web
 By default the routing backend will now be running on port 8000. You'll need to proxy traffic to the backend application through a proper webserver such as apache.
+
+## API
+This application exposes a single endpoint `/api/route`.
+
+### POST /api/route
+Request Content type: application/json
+
+Request body description:
+```json
+{
+    "start": <GeoJSON.Point>,
+    "end": <GeoJSON.Point>,
+    "privacy": <boolean>
+}
+```
+
+Request body example:
+```json
+{
+   {
+      "start":{
+         "type":"Feature",
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               5.082,
+               52.084
+            ]
+         }
+      },
+      "end":{
+         "type":"Feature",
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               5.14,
+               52.105
+            ]
+         }
+      },
+      "privacy":false
+   }
+}
+```
+
