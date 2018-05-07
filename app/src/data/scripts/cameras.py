@@ -17,6 +17,30 @@ set camera = 0
 
 conn.commit()
 
+# Add viewsheds table
+# cur.execute("""
+# drop table if exists viewsheds;
+
+# drop index if exists viewsheds_idx;
+# """)
+
+# conn.commit()
+
+
+# cur.execute("""
+# create table viewsheds (
+#     integer NOT NULL DEFAULT nextval('viewsheds_id_seq'::regclass),
+#     geom geometry(Polygon,4326),
+#     CONSTRAINT viewsheds_pkey PRIMARY KEY (id)
+# );
+
+# create index viewsheds_idx (
+#     on 
+# )
+# """)
+
+# conn.commit()
+
 print('Camera counter reset')
 
 with open('/app/data/' + environ.get('INPUT_VIEWSHEDS')) as jsonfile:
@@ -43,6 +67,7 @@ with open('/app/data/' + environ.get('INPUT_VIEWSHEDS')) as jsonfile:
 
         if len(results) > 0:
 
+            # Camera counter updaten
             for gids in results:
                 for gid in gids:
                     # print(gid)
@@ -55,5 +80,12 @@ with open('/app/data/' + environ.get('INPUT_VIEWSHEDS')) as jsonfile:
                     cur.execute(q)
 
             conn.commit()
+
+            # Viewshed toevoegen aan tabel
+            # cur.execute("""
+            # insert into viewsheds(geom) values(ST_SetSRID(ST_GeomFromGeoJSON('{}'), 4326))
+            # """.format(dumps(feature['geometry'])))
+
+            # conn.commit()
 
 conn.close()
