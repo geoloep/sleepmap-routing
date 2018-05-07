@@ -18,7 +18,7 @@ class Route(APIView):
                 else:
                     route = helper.get_route(start, end)
                 
-                gj = helper.route_to_geojson(route)
+                gj, length, gluur = helper.route_to_geojson(route)
 
                 helper.close()
 
@@ -26,7 +26,11 @@ class Route(APIView):
                     'start': start,
                     'end': end,
                     'geojson': gj,
-                    'cost': route[-1][2] if len(route) > 0 else 0
+                    'cost': route[-1][2] if len(route) > 0 else 0,
+                    'length': length,
+                    'gluur': gluur,
+                    'time': ((length / 1000) / 12) * 60,
+                    'gluur_time': ((gluur / 1000) / 12) * 60,
                 }})
                 
             except KeyError as e:

@@ -99,16 +99,20 @@ class RouteHelper():
             return {
                 "type": "FeatureCollection",
                 "features": []
-            }
+            }, 0
 
         cur = self.get_curr()
 
         coordinates = []
 
         prev = -1
+        length = 0.
         feature = None
         coordinates = None
         features = []
+
+        total_length = 0
+        gluur_length = 0
 
         def new_feature(cameras):
             return {
@@ -125,7 +129,7 @@ class RouteHelper():
         for step in route:
             if step[1] > 0:
                 cur.execute("""
-                select ST_AsGeoJSON(the_geom), camera from ways where gid = {}
+                select ST_AsGeoJSON(the_geom), camera, length_m from ways where gid = {}
                 """.format(step[1]))
 
                 way = cur.fetchone()
@@ -134,11 +138,20 @@ class RouteHelper():
                 if way[1] != prev:
                     if feature is not None:
                         feature['geometry']['coordinates'] = coordinates
+                        feature['properties']['length'] = length
                         features.append(feature)
+
+                        total_length += length
+
+                        if prev > 0:
+                            gluur_length += length
                     
                     coordinates = []
                     feature = new_feature(way[1])
                     prev = way[1]
+                    length = 0
+                
+                length += way[2]
 
                 gj = loads(way[0])
 
@@ -149,12 +162,19 @@ class RouteHelper():
 
         if feature is not None:
             feature['geometry']['coordinates'] = coordinates
+            feature['properties']['length'] = length
             features.append(feature)
+
+            total_length += length
+
+            if prev > 0:
+                gluur_length += length
+            
 
         return {
             'type': 'FeatureCollection',
             'features': features,
-        }
+        }, total_length, gluur_length
 
     def intersect(self):
         pass
