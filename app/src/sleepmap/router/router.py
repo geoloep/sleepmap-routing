@@ -87,7 +87,7 @@ class RouteHelper():
                 source,
                 target,
                 cost + camera * 1000 AS cost,
-                reverse_cost + camera * 1000 as reverse_cost,
+                reverse_cost + camera * 1000 AS reverse_cost
                 FROM ways',
             {}, {},
             directed := true
