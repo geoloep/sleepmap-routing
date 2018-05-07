@@ -26,7 +26,7 @@ class Route(APIView):
                     'start': start,
                     'end': end,
                     'geojson': gj,
-                    'cost': route[-1][2]
+                    'cost': route[-1][2] if len(route) > 0 else 0
                 }})
                 
             except KeyError as e:
