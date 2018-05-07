@@ -66,8 +66,8 @@ class RouteHelper():
             'SELECT gid AS id,
                 source,
                 target,
-                cost,
-                reverse_cost
+                abs(cost),
+                abs(reverse_cost)
                 FROM ways',
             {}, {},
             directed := true
@@ -86,8 +86,8 @@ class RouteHelper():
             'SELECT gid AS id,
                 source,
                 target,
-                cost + camera * 1000 AS cost,
-                reverse_cost + camera * 1000 AS reverse_cost
+                abs(cost + camera * 1000) AS cost,
+                abs(reverse_cost + camera * 1000) AS reverse_cost
                 FROM ways',
             {}, {},
             directed := true
