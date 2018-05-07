@@ -66,7 +66,8 @@ class RouteHelper():
             'SELECT gid AS id,
                 source,
                 target,
-                length AS cost
+                cost,
+                reverse_cost
                 FROM ways',
             {}, {},
             directed := true
@@ -85,16 +86,19 @@ class RouteHelper():
             'SELECT gid AS id,
                 source,
                 target,
-                cost + camera * 10000 AS cost
+                cost + camera * 1000 AS cost,
+                reverse_cost + camera * 1000 as reverse_cost,
                 FROM ways',
             {}, {},
-            directed := true
+            directed := t   rue
         );
         """.format(start, end))
 
         return cur.fetchall()
 
     def route_to_geojson(self, route):
+        # print(route)
+
         if len(route) == 0:
             return {
                 "type": "FeatureCollection",
@@ -129,10 +133,14 @@ class RouteHelper():
         for step in route:
             if step[1] > 0:
                 cur.execute("""
-                select ST_AsGeoJSON(the_geom), camera, length_m from ways where gid = {}
+                select ST_AsGeoJSON(the_geom), camera, length_m, source, target from ways where gid = {}
                 """.format(step[1]))
 
+
                 way = cur.fetchone()
+
+                print(step[0], way[3], way[4])
+
 
                 # Aantal camera's veranderd
                 if way[1] != prev:
@@ -155,10 +163,15 @@ class RouteHelper():
 
                 gj = loads(way[0])
 
-                if (len(coordinates) == 0):
-                    coordinates.extend(gj['coordinates'])
+                if (step[0] != way[3]):
+                    new_coords = gj['coordinates'][::-1]
                 else:
-                    coordinates.extend(gj['coordinates'][1:])
+                    new_coords = gj['coordinates']
+
+                if (len(coordinates) == 0):
+                    coordinates.extend(new_coords)
+                else:
+                    coordinates.extend(new_coords[1:])
 
         if feature is not None:
             feature['geometry']['coordinates'] = coordinates
