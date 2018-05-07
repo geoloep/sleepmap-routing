@@ -90,7 +90,7 @@ class RouteHelper():
                 reverse_cost + camera * 1000 as reverse_cost,
                 FROM ways',
             {}, {},
-            directed := t   rue
+            directed := true
         );
         """.format(start, end))
 
@@ -139,7 +139,7 @@ class RouteHelper():
 
                 way = cur.fetchone()
 
-                print(step[0], way[3], way[4])
+                # print(step[0], way[3], way[4])
 
 
                 # Aantal camera's veranderd
